@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity ^0.8.13;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 import "forge-std/Test.sol";
 import "./interfaces/IUSDT.sol";
 import "./interfaces/ILendingPool.sol";

